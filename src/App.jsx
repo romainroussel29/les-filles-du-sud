@@ -1,221 +1,196 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import { Categories, Nouveautes, Maison, Reassurance } from './components/Univers';
 import ProductCard from './components/ProductCard';
-import CartModal from './components/CartModal';
+import FicheProduit from './components/FicheProduit';
+import Panier from './components/Panier';
+import Commande from './components/Commande';
 import Footer from './components/Footer';
+import { Histoire, MentionsLegales } from './components/Pages';
+import { categories, produits } from './data/produits';
+
+const CLE_STOCKAGE = 'lfs_panier';
+
+function lirePanier() {
+  try {
+    const brut = JSON.parse(localStorage.getItem(CLE_STOCKAGE)) ?? [];
+    return brut.filter((a) => a.cle && produits.some((p) => p.id === a.id));
+  } catch {
+    return [];
+  }
+}
+
+const filtres = [
+  { id: 'tout', nom: 'Tout voir' },
+  { id: 'nouveautes', nom: 'Nouveautés' },
+  ...categories,
+];
+
+const tris = {
+  defaut: { nom: 'Notre sélection', fn: (a, b) => a.id - b.id },
+  croissant: { nom: 'Prix croissant', fn: (a, b) => a.prix - b.prix },
+  decroissant: { nom: 'Prix décroissant', fn: (a, b) => b.prix - a.prix },
+};
+
+const nouveautes = produits.filter((p) => p.nouveau);
+
+const PAGES = { '#histoire': Histoire, '#mentions-legales': MentionsLegales };
+const lireHash = () => window.location.hash;
 
 export default function App() {
-  const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('shopnext_cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [categorie, setCategorie] = useState('tout');
+  const [recherche, setRecherche] = useState('');
+  const [tri, setTri] = useState('defaut');
+  const [panier, setPanier] = useState(lirePanier);
+  const [panierOuvert, setPanierOuvert] = useState(false);
+  const [commandeOuverte, setCommandeOuverte] = useState(false);
+  const [produitOuvert, setProduitOuvert] = useState(null);
+  const champRecherche = useRef(null);
+  const [hash, setHash] = useState(lireHash);
 
-  // États pour le tunnel de commande (Checkout)
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [orderSuccess, setOrderSuccess] = useState(null);
-  const [formData, setFormData] = useState({ name: '', address: '', city: '', payment: 'card' });
-
+  // Navigation entre l'accueil et les pages « Notre histoire » / « Mentions légales »
   useEffect(() => {
-    fetch('https://fakestoreapi.com/products')
-      .then(res => res.json())
-      .then(data => {
-        setProducts(data);
-        setFilteredProducts(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Erreur chargement:", err);
-        setLoading(false);
-      });
-
-    fetch('https://fakestoreapi.com/products/categories')
-      .then(res => res.json())
-      .then(data => setCategories(data))
-      .catch(err => console.error("Erreur catégories:", err));
+    const maj = () => {
+      const h = lireHash();
+      setHash(h);
+      if (PAGES[h]) window.scrollTo(0, 0);
+      else if (h) requestAnimationFrame(() => document.querySelector(h)?.scrollIntoView());
+      else window.scrollTo(0, 0);
+    };
+    window.addEventListener('hashchange', maj);
+    return () => window.removeEventListener('hashchange', maj);
   }, []);
+  const Page = PAGES[hash];
 
   useEffect(() => {
-    localStorage.setItem('shopnext_cart', JSON.stringify(cart));
-  }, [cart]);
+    try { localStorage.setItem(CLE_STOCKAGE, JSON.stringify(panier)); } catch { /* stockage indisponible */ }
+  }, [panier]);
 
-  useEffect(() => {
-    let result = products;
-    if (selectedCategory !== 'all') {
-      result = result.filter(item => item.category === selectedCategory);
-    }
-    if (searchTerm.trim() !== '') {
-      result = result.filter(item => 
-        item.title.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-    setFilteredProducts(result);
-  }, [searchTerm, selectedCategory, products]);
+  const affiches = useMemo(() => {
+    const q = recherche.trim().toLowerCase();
+    return produits
+      .filter((p) => categorie === 'tout' || (categorie === 'nouveautes' ? p.nouveau : p.categorie === categorie))
+      .filter((p) => !q || `${p.nom} ${p.coloris} ${p.matiere}`.toLowerCase().includes(q))
+      .sort(tris[tri].fn);
+  }, [categorie, recherche, tri]);
 
-  const handleAddToCart = (product) => {
-    setCart(prev => {
-      const existing = prev.find(item => item.id === product.id);
-      if (existing) {
-        return prev.map(item => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-    setIsCartOpen(true);
+  const articles = panier.map((a) => ({ ...a, produit: produits.find((p) => p.id === a.id) }));
+  const nbArticles = panier.reduce((s, a) => s + a.quantite, 0);
+  const sousTotal = articles.reduce((s, a) => s + a.produit.prix * a.quantite, 0);
+
+  const ajouter = (produit, taille) => {
+    const cle = `${produit.id}-${taille}`;
+    setPanier((prev) =>
+      prev.some((a) => a.cle === cle)
+        ? prev.map((a) => (a.cle === cle ? { ...a, quantite: a.quantite + 1 } : a))
+        : [...prev, { cle, id: produit.id, taille, quantite: 1 }]
+    );
+    setProduitOuvert(null);
+    setPanierOuvert(true);
   };
 
-  const updateQuantity = (id, delta) => {
-    setCart(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQty = item.quantity + delta;
-        return newQty > 0 ? { ...item, quantity: newQty } : null;
-      }
-      return item;
-    }).filter(Boolean));
+  const changerQuantite = (cle, delta) => {
+    setPanier((prev) =>
+      prev
+        .map((a) => (a.cle === cle ? { ...a, quantite: a.quantite + delta } : a))
+        .filter((a) => a.quantite > 0)
+    );
   };
 
-  const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-  const handleCheckoutSubmit = (e) => {
-    e.preventDefault();
-    const orderId = 'SN-' + Math.floor(100000 + Math.random() * 900000);
-    setOrderSuccess({ id: orderId, ...formData, total: totalPrice });
-    setCart([]);
-    setIsCheckoutOpen(false);
+  const choisirCategorie = (id, chercher = false) => {
+    setCategorie(id);
+    setRecherche('');
+    if (chercher) setTimeout(() => champRecherche.current?.focus({ preventScroll: true }), 400);
   };
+
+  const titre = categorie === 'tout' ? 'La collection' : filtres.find((f) => f.id === categorie)?.nom;
 
   return (
-    <div>
-      <Navbar cartCount={totalItems} setIsCartOpen={setIsCartOpen} />
-      
-      <Hero />
+    <>
+      <Navbar nbArticles={nbArticles} ouvrirPanier={() => setPanierOuvert(true)} choisirCategorie={choisirCategorie} toujoursPlein={Page === MentionsLegales} />
 
-      {/* SECTION BOUTIQUE */}
-      <main id="shop" className="shop-container">
-        {orderSuccess && (
-          <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', padding: '1.5rem', borderRadius: '1rem', marginBottom: '2rem', textAlign: 'center' }}>
-            <h3 style={{ color: '#166534', marginBottom: '0.5rem' }}>🎉 Commande validée avec succès !</h3>
-            <p style={{ color: '#15803d', fontSize: '0.9rem' }}>Numéro de commande : <strong>{orderSuccess.id}</strong></p>
-            <p style={{ color: '#64748b', fontSize: '0.85rem', marginTop: '0.5rem' }}>Merci {orderSuccess.name}, votre colis sera envoyé à {orderSuccess.city}.</p>
+      {Page ? <main><Page /></main> : (
+      <main>
+        <Hero choisirCategorie={choisirCategorie} />
+        <Categories choisirCategorie={choisirCategorie} />
+        <Nouveautes produits={nouveautes} ouvrir={setProduitOuvert} ajouter={ajouter} choisirCategorie={choisirCategorie} />
+        <Maison />
+
+        <section id="boutique" className="section boutique" aria-labelledby="titre-boutique">
+          <div className="section-entete">
+            <h2 id="titre-boutique" className="titre-section">{titre}</h2>
+            <p className="boutique-compte">{affiches.length} pièce{affiches.length > 1 ? 's' : ''}</p>
           </div>
-        )}
 
-        <div className="filters-bar">
-          <input 
-            type="text"
-            placeholder="Rechercher un produit..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-          <div className="category-buttons">
-            <button 
-              onClick={() => setSelectedCategory('all')}
-              className={`cat-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-            >
-              Tous
-            </button>
-            {categories.map((cat, idx) => (
-              <button 
-                key={idx}
-                onClick={() => setSelectedCategory(cat)}
-                className={`cat-btn ${selectedCategory === cat ? 'active' : ''}`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {loading ? (
-          <div style={{ textAlign: 'center', padding: '5rem 0', color: 'var(--text-muted)' }}>Chargement de la collection...</div>
-        ) : (
-          <div className="products-grid">
-            {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} addToCart={handleAddToCart} />
-            ))}
-          </div>
-        )}
-      </main>
-
-      {/* MODAL PANIER */}
-      <CartModal 
-        isOpen={isCartOpen} 
-        onClose={() => setIsCartOpen(false)} 
-        cart={cart} 
-        updateQuantity={updateQuantity} 
-        totalPrice={totalPrice} 
-        totalItems={totalItems} 
-        onCheckout={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}
-      />
-
-      {/* MODAL CHECKOUT / PAIEMENT */}
-      {isCheckoutOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '480px' }}>
-            <div className="modal-header">
-              <h3>Finaliser la commande</h3>
-              <button className="close-btn" onClick={() => setIsCheckoutOpen(false)}>✕</button>
-            </div>
-            
-            <form onSubmit={handleCheckoutSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', flex: 1, overflowY: 'auto' }}>
-              <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>Nom complet</label>
-                <input 
-                  type="text" required placeholder="Jean Dupont"
-                  value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>Adresse de livraison</label>
-                <input 
-                  type="text" required placeholder="123 rue de la République"
-                  value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>Ville</label>
-                <input 
-                  type="text" required placeholder="Paris"
-                  value={formData.city} onChange={e => setFormData({...formData, city: e.target.value})}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none' }}
-                />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>Moyen de paiement</label>
-                <select 
-                  value={formData.payment} onChange={e => setFormData({...formData, payment: e.target.value})}
-                  style={{ width: '100%', padding: '0.75rem', borderRadius: '0.75rem', border: '1px solid var(--border-color)', outline: 'none', background: 'white' }}
+          <div className="filtres">
+            <div className="filtres-categories" role="group" aria-label="Catégories">
+              {filtres.map((f) => (
+                <button
+                  key={f.id}
+                  className={`filtre ${categorie === f.id ? 'actif' : ''}`}
+                  aria-pressed={categorie === f.id}
+                  onClick={() => setCategorie(f.id)}
                 >
-                  <option value="card">Carte bancaire (Simulée)</option>
-                  <option value="paypal">PayPal</option>
-                  <option value="apple">Apple Pay</option>
+                  {f.nom}
+                </button>
+              ))}
+            </div>
+            <div className="filtres-outils">
+              <label className="recherche">
+                <span className="visuellement-cache">Rechercher</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+                  <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                  <path d="M15.5 15.5 L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                <input ref={champRecherche} type="search" placeholder="Rechercher" value={recherche} onChange={(e) => setRecherche(e.target.value)} />
+              </label>
+              <label className="tri">
+                <span className="visuellement-cache">Trier par</span>
+                <select value={tri} onChange={(e) => setTri(e.target.value)}>
+                  {Object.entries(tris).map(([id, t]) => <option key={id} value={id}>{t.nom}</option>)}
                 </select>
-              </div>
-
-              <div className="total-row" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-                <span>Montant total :</span>
-                <span className="total-price">{totalPrice} €</span>
-              </div>
-
-              <button type="submit" className="checkout-btn">
-                Payer {totalPrice} €
-              </button>
-            </form>
+              </label>
+            </div>
           </div>
-        </div>
+
+          {affiches.length === 0 ? (
+            <div className="aucun">
+              <p>Aucune pièce ne correspond à « {recherche} ».</p>
+              <button className="bouton bouton-noir" onClick={() => { setRecherche(''); setCategorie('tout'); }}>
+                Voir toute la collection
+              </button>
+            </div>
+          ) : (
+            <div className="grille">
+              {affiches.map((p) => <ProductCard key={p.id} produit={p} ouvrir={setProduitOuvert} ajouter={ajouter} />)}
+            </div>
+          )}
+        </section>
+
+        <Reassurance />
+      </main>
       )}
 
-      <Footer />
-    </div>
+      <Footer choisirCategorie={choisirCategorie} />
+
+      <FicheProduit produit={produitOuvert} fermer={() => setProduitOuvert(null)} ajouter={ajouter} />
+      <Panier
+        ouvert={panierOuvert}
+        fermer={() => setPanierOuvert(false)}
+        articles={articles}
+        changerQuantite={changerQuantite}
+        sousTotal={sousTotal}
+        nbArticles={nbArticles}
+        commander={() => { setPanierOuvert(false); setCommandeOuverte(true); }}
+      />
+      <Commande
+        ouvert={commandeOuverte}
+        fermer={() => setCommandeOuverte(false)}
+        articles={articles}
+        sousTotal={sousTotal}
+        valider={() => setPanier([])}
+      />
+    </>
   );
 }
