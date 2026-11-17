@@ -1,5 +1,5 @@
 {
-  "name": "shopnext",
+  "name": "les-filles-du-sud",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "images": "node scripts/generer-images.mjs",
+    "images:compresser": "node scripts/compresser-images.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",
@@ -22,6 +24,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
+    "sharp": "^0.35.5",
     "vite": "^8.3.6"
   }
 }
