@@ -1,10 +1,17 @@
-export default function Hero() {
+import Photo from './Photo';
+
+export default function Hero({ choisirCategorie }) {
   return (
-    <header className="hero">
-      <span className="hero-tag">✨ Nouvelle Collection 2026</span>
-      <h1>Le futur du shopping <br /><span>en un seul clic.</span></h1>
-      <p>Explorez notre sélection exclusive de produits high-tech, mode et accessoires avec une expérience fluide, moderne et sécurisée.</p>
-      <a href="#shop" className="hero-btn">Explorer la boutique</a>
-    </header>
+    <section className="hero">
+      <Photo cle="hero" alt="Une femme en robe longue bleu ciel sur les rochers d’une calanque, face à la mer" className="hero-photo" prioritaire />
+      <div className="hero-voile" aria-hidden="true" />
+      <div className="hero-texte">
+        <h1>Nées sous le soleil</h1>
+        <p>La collection d’été : robes en lin, maillots de bain et paniers tressés.</p>
+        <a href="#boutique" className="bouton bouton-blanc" onClick={() => choisirCategorie('tout')}>
+          Découvrir la collection
+        </a>
+      </div>
+    </section>
   );
 }
