@@ -21,8 +21,9 @@ export default function Navbar({ nbArticles, ouvrirPanier, choisirCategorie, tou
 
   return (
     <header className={`entete ${defile || toujoursPlein ? 'entete-plein' : ''}`}>
-      <p className="annonce">Livraison offerte dès 80 € et retours gratuits sous 30 jours</p>
+      <p className="annonce">Livraison offerte dès 80 € — Retours gratuits sous 30 jours</p>
       <nav className="nav" aria-label="Navigation principale">
+        <a href="#" className="logo" aria-label="Les Filles du Sud, accueil"><Logo /></a>
         <ul className="nav-liens">
           {liens.map((l) => (
             <li key={l.id}>
@@ -30,16 +31,10 @@ export default function Navbar({ nbArticles, ouvrirPanier, choisirCategorie, tou
             </li>
           ))}
         </ul>
-        <a href="#" className="logo" aria-label="Les Filles du Sud, accueil"><Logo /></a>
         <div className="nav-droite">
-          <a href="#boutique" className="nav-icone" aria-label="Rechercher" onClick={() => choisirCategorie('tout', true)}>
-            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
-              <circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
-              <path d="M15.5 15.5 L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          </a>
-          <button className="nav-panier" onClick={ouvrirPanier} aria-label={`Ouvrir le panier, ${nbArticles} article${nbArticles > 1 ? 's' : ''}`}>
-            Panier <span className="nav-compte">({nbArticles})</span>
+          <a href="#boutique" className="nav-lien" onClick={() => choisirCategorie('tout', true)}>Recherche</a>
+          <button className="nav-lien" onClick={ouvrirPanier} aria-label={`Ouvrir le panier, ${nbArticles} article${nbArticles > 1 ? 's' : ''}`}>
+            Panier ({nbArticles})
           </button>
         </div>
       </nav>
