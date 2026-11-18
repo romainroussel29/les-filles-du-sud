@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import { Categories, Nouveautes, Maison, Reassurance } from './components/Univers';
+import { Categories, Nouveautes, Maison, Reassurance, EnteteSection } from './components/Univers';
 import ProductCard from './components/ProductCard';
 import FicheProduit from './components/FicheProduit';
 import Panier from './components/Panier';
@@ -118,10 +118,7 @@ export default function App() {
         <Maison />
 
         <section id="boutique" className="section boutique" aria-labelledby="titre-boutique">
-          <div className="section-entete">
-            <h2 id="titre-boutique" className="titre-section">{titre}</h2>
-            <p className="boutique-compte">{affiches.length} pièce{affiches.length > 1 ? 's' : ''}</p>
-          </div>
+          <EnteteSection surtitre={`Boutique — ${affiches.length} pièce${affiches.length > 1 ? 's' : ''}`} titre={titre} id="titre-boutique" />
 
           <div className="filtres">
             <div className="filtres-categories" role="group" aria-label="Catégories">

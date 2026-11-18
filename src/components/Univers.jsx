@@ -1,5 +1,6 @@
 import Photo from './Photo';
 import ProductCard from './ProductCard';
+import Icone from './Icones';
 
 const tuiles = [
   { id: 'robes', nom: 'Robes' },
@@ -8,15 +9,27 @@ const tuiles = [
   { id: 'accessoires', nom: 'Accessoires' },
 ];
 
+export function EnteteSection({ surtitre, titre, id, clair = false }) {
+  return (
+    <div className={`entete-section ${clair ? 'entete-section-clair' : ''}`}>
+      <p className="surtitre">{surtitre}</p>
+      <h2 id={id} className="titre-section">{titre}</h2>
+    </div>
+  );
+}
+
 export function Categories({ choisirCategorie }) {
   return (
-    <section className="section categories" aria-labelledby="titre-categories">
-      <h2 id="titre-categories" className="titre-section">Par envie</h2>
+    <section className="categories" aria-labelledby="titre-categories">
+      <EnteteSection surtitre="La collection" titre="Par envie" id="titre-categories" clair />
       <div className="categories-grille">
         {tuiles.map((t) => (
           <a key={t.id} href="#boutique" className="tuile" onClick={() => choisirCategorie(t.id)}>
             <Photo cle={t.id} alt={t.nom} className="tuile-photo" />
-            <span className="tuile-nom">{t.nom}</span>
+            <span className="tuile-etiquette">
+              <Icone nom={t.id} className="tuile-icone" />
+              <span>{t.nom}</span>
+            </span>
           </a>
         ))}
       </div>
@@ -27,12 +40,12 @@ export function Categories({ choisirCategorie }) {
 export function Nouveautes({ produits, ouvrir, ajouter, choisirCategorie }) {
   return (
     <section className="section nouveautes" aria-labelledby="titre-nouveautes">
-      <div className="section-entete">
-        <h2 id="titre-nouveautes" className="titre-section">Nouveautés</h2>
-        <a href="#boutique" className="lien" onClick={() => choisirCategorie('nouveautes')}>Tout voir</a>
-      </div>
+      <EnteteSection surtitre="Juste arrivées" titre="Nouveautés" id="titre-nouveautes" />
       <div className="rangee">
         {produits.map((p) => <ProductCard key={p.id} produit={p} ouvrir={ouvrir} ajouter={ajouter} />)}
+      </div>
+      <div className="section-action">
+        <a href="#boutique" className="bouton bouton-plein" onClick={() => choisirCategorie('nouveautes')}>Tout voir</a>
       </div>
     </section>
   );
@@ -44,16 +57,13 @@ export function Maison() {
       <Photo cle="maison" alt="Deux amies à une terrasse de village, sous un store rayé" className="maison-photo" />
       <div className="maison-voile" aria-hidden="true" />
       <div className="maison-texte">
-        <h2 id="titre-maison">Pensée dans le Sud, portée partout</h2>
+        <p className="surtitre">La maison</p>
+        <h2 id="titre-maison">Pensée dans le Sud</h2>
         <p>
-          Les Filles du Sud, ce sont des vêtements simples et lumineux, dessinés pour les marchés du matin,
+          Des vêtements simples et lumineux, dessinés à Marseille pour les marchés du matin,
           les criques à midi et les terrasses du soir.
         </p>
-        <p>
-          Du lin qui se froisse joliment, des imprimés qui sentent les vacances et des paniers qu’on garde
-          d’un été à l’autre.
-        </p>
-        <a href="#histoire" className="bouton bouton-blanc">Lire notre histoire</a>
+        <a href="#histoire" className="bouton bouton-fantome">Lire notre histoire</a>
       </div>
     </section>
   );
