@@ -9,7 +9,7 @@ export default function ProductCard({ produit, ouvrir, ajouter }) {
   const plus = () => (unique ? ajouter(produit, produit.tailles[0]) : setTailles((v) => !v));
 
   return (
-    <article className="carte" onMouseLeave={() => setTailles(false)}>
+    <article className="carte apparition" onMouseLeave={() => setTailles(false)}>
       <div className="carte-media">
         <button className="carte-image" onClick={() => ouvrir(produit)} aria-label={`Voir ${produit.nom}`}>
           <Photo cle={produit.id} alt={`${produit.nom}, ${produit.coloris}`} />

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 import Logo from './Logo';
+import { Defilant } from './Effets';
+
+const annonces = ['Livraison offerte dès 80 €', 'Retours gratuits sous 30 jours', 'Nouveau drop été 2026', 'Dessiné à Marseille'];
 
 const liens = [
   { id: 'nouveautes', nom: 'Nouveautés' },
@@ -21,9 +24,9 @@ export default function Navbar({ nbArticles, ouvrirPanier, choisirCategorie, tou
 
   return (
     <header className={`entete ${defile || toujoursPlein ? 'entete-plein' : ''}`}>
-      <p className="annonce">Livraison offerte dès 80 € — Retours gratuits sous 30 jours</p>
+      <Defilant variante="annonce" mots={annonces} />
       <nav className="nav" aria-label="Navigation principale">
-        <a href="#" className="logo" aria-label="Les Filles du Sud, accueil"><Logo /></a>
+        <a href="#" className="logo" aria-label="Vibe du Sud, accueil"><Logo /></a>
         <ul className="nav-liens">
           {liens.map((l) => (
             <li key={l.id}>

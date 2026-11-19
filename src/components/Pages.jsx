@@ -6,7 +6,7 @@ export function Histoire() {
     { annee: '2019', texte: 'Camille et Léa cousent leurs premières robes dans l’appartement familial d’Endoume, avec des coupons de lin chinés au marché.' },
     { annee: '2020', texte: 'Premier stand au marché de la Plaine, à Marseille. Les vingt robes partent en une matinée.' },
     { annee: '2022', texte: 'Ouverture de l’atelier à Marseille et lancement de la boutique en ligne. Les paniers en raphia rejoignent la collection.' },
-    { annee: '2024', texte: 'Arrivée des maillots de bain, en polyamide recyclé. L’équipe compte désormais huit filles du Sud.' },
+    { annee: '2024', texte: 'Arrivée des maillots de bain, en polyamide recyclé. L’équipe compte désormais huit personnes, toutes avec la même vibe.' },
   ];
 
   return (
@@ -21,10 +21,10 @@ export function Histoire() {
       </header>
 
       <div className="page-corps">
-        <section className="recit">
+        <section className="recit apparition">
           <Embleme className="recit-embleme" />
           <p className="recit-chapeau">
-            Les Filles du Sud est née à Marseille, entre le Vieux-Port et les calanques, là où Camille et Léa
+            Vibe du Sud est né à Marseille, entre le Vieux-Port et les calanques, là où Camille et Léa
             ont grandi.
           </p>
           <p>
@@ -45,7 +45,7 @@ export function Histoire() {
           <h2 id="titre-chrono" className="titre-section">Quelques dates</h2>
           <ol>
             {etapes.map((e) => (
-              <li key={e.annee}>
+              <li key={e.annee} className="apparition">
                 <span className="chrono-annee">{e.annee}</span>
                 <p>{e.texte}</p>
               </li>
@@ -55,7 +55,7 @@ export function Histoire() {
 
         <section className="engagements" aria-labelledby="titre-engagements">
           <h2 id="titre-engagements" className="titre-section">Ce à quoi nous tenons</h2>
-          <div className="engagements-grille">
+          <div className="engagements-grille apparition">
             <div>
               <h3>Des matières naturelles</h3>
               <p>Lin européen, coton biologique, viscose certifiée et raphia naturel pour la grande majorité de la collection.</p>
@@ -88,7 +88,7 @@ export function MentionsLegales() {
 
         <h2>Éditeur du site</h2>
         <p>
-          Le site lesfillesdusud.fr est édité par la société <strong>Les Filles du Sud</strong>, société par actions
+          Le site <strong>vibe-du-sud.fr</strong> est édité par la société <strong>Vibe du Sud</strong>, société par actions
           simplifiée (SAS) au capital de 10 000 €.
         </p>
         <ul>
@@ -96,26 +96,26 @@ export function MentionsLegales() {
           <li>RCS Marseille : XXX XXX XXX</li>
           <li>Numéro de TVA intracommunautaire : FR XX XXX XXX XXX</li>
           <li>Téléphone : 04 XX XX XX XX (du lundi au vendredi, de 9 h à 17 h)</li>
-          <li>E-mail : contact@lesfillesdusud.fr</li>
+          <li>E-mail : contact@vibe-du-sud.fr</li>
           <li>Directrice de la publication : Camille Roux, présidente</li>
         </ul>
 
         <h2>Hébergement</h2>
         <p>
-          Le site est hébergé par Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis.
+          Le site est hébergé par Cloudflare, Inc., 101 Townsend Street, San Francisco, CA 94107, États-Unis.
         </p>
 
         <h2>Propriété intellectuelle</h2>
         <p>
           L’ensemble des contenus du site (textes, photographies, logo, noms de produits, éléments graphiques)
-          est la propriété exclusive de Les Filles du Sud. Toute reproduction, représentation ou diffusion,
+          est la propriété exclusive de Vibe du Sud. Toute reproduction, représentation ou diffusion,
           totale ou partielle, sans autorisation écrite préalable est interdite.
         </p>
 
         <h2>Données personnelles</h2>
         <p>
           Les données collectées sur le site (nom, adresse, e-mail, historique de commandes) sont traitées par
-          Les Filles du Sud pour la gestion des commandes, la relation client et, avec votre accord, l’envoi
+          Vibe du Sud pour la gestion des commandes, la relation client et, avec votre accord, l’envoi
           de notre lettre d’information. Elles sont conservées pendant la durée de la relation commerciale,
           puis trois ans à des fins de prospection, et ne sont jamais revendues.
         </p>
@@ -123,7 +123,7 @@ export function MentionsLegales() {
           Conformément au Règlement général sur la protection des données (RGPD) et à la loi Informatique et
           Libertés, vous disposez d’un droit d’accès, de rectification, d’effacement, de limitation,
           d’opposition et de portabilité de vos données. Pour l’exercer, écrivez à
-          contact@lesfillesdusud.fr ou à l’adresse du siège social. Vous pouvez également introduire une
+          contact@vibe-du-sud.fr ou à l’adresse du siège social. Vous pouvez également introduire une
           réclamation auprès de la CNIL (www.cnil.fr).
         </p>
 

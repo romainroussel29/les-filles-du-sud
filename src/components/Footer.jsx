@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { categories } from '../data/produits';
 import { Embleme } from './Logo';
+import { Defilant } from './Effets';
 
 export default function Footer({ choisirCategorie }) {
   const [email, setEmail] = useState('');
@@ -10,8 +11,8 @@ export default function Footer({ choisirCategorie }) {
     <footer className="pied">
       <div className="pied-haut">
         <div className="pied-lettre">
-          <h2>Rejoignez les Filles du Sud</h2>
-          <p>Les nouveautés, les ventes privées et un peu de soleil dans votre boîte mail.</p>
+          <h2>Rejoins la vibe</h2>
+          <p>Les drops, les ventes privées et un peu de soleil direct dans ta boîte mail.</p>
           {inscrite ? (
             <p className="pied-confirmation" role="status">C’est noté : vous recevrez nos nouvelles à {email}.</p>
           ) : (
@@ -51,11 +52,12 @@ export default function Footer({ choisirCategorie }) {
         </div>
       </div>
 
+      <Defilant variante="pied" mots={['Vibe du Sud', 'Soleil, sel & lin', 'vibe-du-sud.fr']} />
       <div className="pied-marque" aria-hidden="true">
         <Embleme className="pied-embleme" />
-        <p>Les Filles du Sud</p>
+        <p>Vibe du Sud</p>
       </div>
-      <p className="pied-bas">© {new Date().getFullYear()} Les Filles du Sud. Tous droits réservés.</p>
+      <p className="pied-bas">© {new Date().getFullYear()} Vibe du Sud. Tous droits réservés.</p>
     </footer>
   );
 }

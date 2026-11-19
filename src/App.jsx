@@ -7,14 +7,15 @@ import FicheProduit from './components/FicheProduit';
 import Panier from './components/Panier';
 import Commande from './components/Commande';
 import Footer from './components/Footer';
+import { Apparitions, BarreProgression, Defilant } from './components/Effets';
 import { Histoire, MentionsLegales } from './components/Pages';
 import { categories, produits } from './data/produits';
 
-const CLE_STOCKAGE = 'lfs_panier';
+const CLE_STOCKAGE = 'vds_panier';
 
 function lirePanier() {
   try {
-    const brut = JSON.parse(localStorage.getItem(CLE_STOCKAGE)) ?? [];
+    const brut = JSON.parse(localStorage.getItem(CLE_STOCKAGE) ?? localStorage.getItem('lfs_panier')) ?? [];
     return brut.filter((a) => a.cle && produits.some((p) => p.id === a.id));
   } catch {
     return [];
@@ -108,11 +109,17 @@ export default function App() {
 
   return (
     <>
+      <BarreProgression />
+      <Apparitions />
       <Navbar nbArticles={nbArticles} ouvrirPanier={() => setPanierOuvert(true)} choisirCategorie={choisirCategorie} toujoursPlein={Page === MentionsLegales} />
 
       {Page ? <main><Page /></main> : (
       <main>
         <Hero choisirCategorie={choisirCategorie} />
+        <div className="bandes">
+          <Defilant mots={['Robes en lin', 'Maillots', 'Paniers en raphia', 'Soleil garanti', 'Made in Marseille']} />
+          <Defilant variante="azur" inverse mots={['Vibe du Sud', 'Été 2026', 'Apéro en terrasse', 'Criques & calanques', 'Sunset club']} />
+        </div>
         <Categories choisirCategorie={choisirCategorie} />
         <Nouveautes produits={nouveautes} ouvrir={setProduitOuvert} ajouter={ajouter} choisirCategorie={choisirCategorie} />
         <Maison />

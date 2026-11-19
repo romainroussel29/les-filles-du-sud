@@ -1,6 +1,6 @@
-# Les Filles du Sud
+# Vibe du Sud
 
-Boutique en ligne de Les Filles du Sud, marque de prêt-à-porter féminin née à Marseille : robes, hauts, jupes et shorts, pantalons, maillots de bain, sacs et accessoires.
+Boutique en ligne de Vibe du Sud (vibe-du-sud.fr), marque de prêt-à-porter féminin née à Marseille : robes, hauts, jupes et shorts, pantalons, maillots de bain, sacs et accessoires.
 
 ## Fonctionnalités
 

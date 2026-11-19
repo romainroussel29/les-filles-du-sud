@@ -1,4 +1,4 @@
-// Catalogue Les Filles du Sud
+// Catalogue Vibe du Sud
 // `photo` est la description envoyée au générateur d'images (scripts/generer-images.mjs).
 
 export const categories = [
