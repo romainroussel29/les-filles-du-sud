@@ -1,0 +1,21 @@
+// Page 404.
+
+.not-found {
+  display: grid;
+  justify-items: center;
+  gap: 24px;
+  min-height: 60svh;
+  align-content: center;
+  text-align: center;
+
+  .eyebrow {
+    color: var(--color-coral-text);
+    font-weight: 600;
+  }
+}
+.not-found__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}

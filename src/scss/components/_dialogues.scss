@@ -1,0 +1,66 @@
+// Boîtes de dialogue natives <dialog> : commande (fenêtre centrée) et panier (tiroir à droite).
+
+.dialog {
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  color: var(--color-ink);
+  background: var(--color-white);
+  max-width: none;
+  max-height: none;
+
+  &::backdrop {
+    background: rgba(26, 15, 10, 0.4);
+    backdrop-filter: blur(6px);
+  }
+}
+.dialog__body {
+  position: relative;
+  height: 100%;
+}
+
+.dialog__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-white);
+
+  &:hover {
+    background: var(--color-sand);
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.dialog--checkout {
+  margin: auto;
+  width: min(1040px, calc(100vw - 32px));
+  max-height: calc(100dvh - 32px);
+  overflow: auto;
+  border-radius: 22px;
+  box-shadow: 0 40px 80px -30px rgba(26, 15, 10, 0.5);
+
+  &[open] {
+    animation: fade-in 0.25s ease-out;
+  }
+}
+
+.dialog--drawer {
+  margin: 0 0 0 auto;
+  width: min(460px, 100vw);
+  height: 100dvh;
+  max-height: 100dvh;
+  border-radius: 22px 0 0 22px;
+
+  &[open] {
+    animation: slide-in 0.3s var(--ease-out);
+  }
+}

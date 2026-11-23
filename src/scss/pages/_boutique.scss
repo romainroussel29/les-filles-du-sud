@@ -1,0 +1,16 @@
+// Boutique et pages de catégorie.
+
+.shop {
+  padding-top: 48px;
+  padding-bottom: 100px;
+}
+.shop-header {
+  .section-title {
+    max-width: 18ch;
+  }
+}
+.shop-header__intro {
+  max-width: 60ch;
+  color: var(--color-muted);
+  font-size: 13px;
+}

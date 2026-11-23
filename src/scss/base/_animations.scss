@@ -1,0 +1,68 @@
+// Animations partagées par plusieurs composants.
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+@keyframes breathe {
+  from {
+    transform: scale(1.06);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pulse {
+  50% {
+    transform: scale(1.18) rotate(20deg);
+  }
+}
+@keyframes shimmer {
+  to {
+    background-position: 100% 0;
+  }
+}
+@keyframes float {
+  50% {
+    transform: translate(3%, -2%) scale(1.05);
+  }
+  to {
+    transform: translate(-3%, 2%) scale(1);
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 32px;
+  }
+}
+
+// Apparition au défilement (src/js/modules/reveal.js).
+// La classe « js » est posée sur <html> par un court script dans <head> :
+// sans JavaScript, tout le contenu reste visible.
+.js .reveal:not(.is-visible) {
+  opacity: 0;
+}
+.reveal.is-visible {
+  animation: reveal 0.9s var(--reveal-delay, 0ms) var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal:not(.is-visible) {
+    opacity: 1;
+  }
+}

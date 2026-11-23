@@ -1,0 +1,35 @@
+// Variables de design.
+// Base éditoriale (monospace pour l'interface, titres larges) réchauffée par une palette
+// coucher de soleil : jaune, corail, rose et bleu Méditerranée.
+
+// Points de rupture, utilisables dans les autres fichiers avec : @use '../base/variables' as *;
+$tablette: 1020px;
+$mobile: 640px;
+
+:root {
+  --color-ink: #1a0f0a; // texte, boutons pleins, bandes sombres
+  --color-white: #ffffff;
+  --color-cream: #fff7ec; // fond du site
+  --color-sand: #fbeadb; // bandes secondaires, fonds de photos
+  --color-muted: #75655b;
+  --color-line: #ead8c8;
+  --color-danger: #b3261e;
+
+  --color-sun: #ffb800;
+  --color-coral: #ff5a3c;
+  --color-coral-text: #c9361a; // corail assez foncé pour du petit texte sur fond clair
+  --color-pink: #ff3d8b;
+  --color-azure: #00a6c7;
+  --gradient-sunset: linear-gradient(100deg, var(--color-sun), var(--color-coral) 45%, var(--color-pink));
+
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-wide: 'Archivo', 'Arial', sans-serif;
+  --font-display: 'Unbounded', 'Archivo', 'Arial', sans-serif;
+  --font-script: 'Caveat', 'Segoe Script', cursive;
+
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --gutter: clamp(16px, 3vw, 40px);
+  --content-width: 1200px;
+  --header-height: 88px;
+}

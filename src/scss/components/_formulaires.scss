@@ -1,0 +1,185 @@
+// Champs de formulaire, choix (boutons radio en liste) et sélecteur de taille.
+@use '../base/variables' as *;
+
+.field {
+  display: grid;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+
+  input,
+  textarea,
+  select {
+    width: 100%;
+    min-height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--color-line);
+    border-radius: 0;
+    background: var(--color-white);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+  textarea {
+    min-height: 160px;
+    padding: 12px 14px;
+    resize: vertical;
+  }
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--color-ink);
+  }
+  [aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+  .field-error {
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+}
+.field__control {
+  position: relative;
+  display: block;
+}
+.field__badge {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+}
+.field-error {
+  margin-top: 8px;
+  color: var(--color-danger);
+  font-size: 12px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 0.7fr 1.3fr;
+  gap: 12px;
+}
+.form-row--even {
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: $mobile) {
+  .form-row,
+  .form-row--even {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Choix (livraison, paiement)
+.choice-group {
+  display: grid;
+  border: none;
+
+  legend {
+    margin-bottom: 8px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.093em;
+    text-transform: uppercase;
+  }
+}
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: -1px;
+  padding: 14px 16px;
+  cursor: pointer;
+  border: 1px solid var(--color-line);
+  font-size: 12px;
+
+  &:has(input:checked) {
+    position: relative;
+    z-index: 1;
+    border-color: var(--color-ink);
+  }
+  input {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--color-ink);
+  }
+}
+.choice__text {
+  display: grid;
+  flex: 1;
+
+  strong {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.067em;
+    text-transform: uppercase;
+  }
+  span {
+    color: var(--color-muted);
+    font-size: 12px;
+  }
+}
+.choice__price {
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+// Choix de la taille : boutons radio présentés en grille
+.size-picker {
+  margin: 32px 0 0;
+  border: none;
+
+  legend {
+    margin-bottom: 10px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.093em;
+    text-transform: uppercase;
+  }
+}
+.size-picker__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(52px, 1fr));
+  border-left: 1px solid var(--color-line);
+  border-top: 1px solid var(--color-line);
+}
+.size-picker__option {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 44px;
+  cursor: pointer;
+  border-right: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  font-size: 12px;
+  text-transform: uppercase;
+
+  input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  &:hover {
+    background: var(--color-sand);
+  }
+  &:has(input:checked) {
+    background: var(--color-ink);
+    color: var(--color-white);
+  }
+  &:has(input:focus-visible) {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}

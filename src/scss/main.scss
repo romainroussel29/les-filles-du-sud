@@ -1,0 +1,36 @@
+// Vibe du Sud — point d'entrée des styles.
+// Compilé par `npm run build:css` en public/assets/css/style.min.css.
+
+// Base : variables, polices, remise à zéro
+@use 'base/variables';
+@use 'base/typo';
+@use 'base/reset';
+@use 'base/animations';
+@use 'base/utilitaires';
+
+// Mise en page commune à toutes les pages
+@use 'layout/grille';
+@use 'layout/header';
+@use 'layout/footer';
+
+// Composants réutilisables
+@use 'components/boutons';
+@use 'components/logo';
+@use 'components/bandeaux';
+@use 'components/pastille';
+@use 'components/fil-ariane';
+@use 'components/cartes';
+@use 'components/filtres';
+@use 'components/formulaires';
+@use 'components/dialogues';
+@use 'components/panier';
+@use 'components/commande';
+
+// Styles propres à une page
+@use 'pages/accueil';
+@use 'pages/boutique';
+@use 'pages/produit';
+@use 'pages/a-propos';
+@use 'pages/contact';
+@use 'pages/legal';
+@use 'pages/erreur';

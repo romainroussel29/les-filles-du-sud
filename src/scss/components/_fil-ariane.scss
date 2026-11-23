@@ -1,0 +1,30 @@
+// Fil d'Ariane (repris par Google sous le titre du résultat, grâce aux données structurées).
+
+.breadcrumb {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 28px var(--gutter) 0;
+  font-size: 10px;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+
+  ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+  li + li::before {
+    content: '/';
+    margin-right: 8px;
+  }
+  a:hover {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  [aria-current='page'] {
+    color: var(--color-ink);
+  }
+}

@@ -1,0 +1,65 @@
+# Vibe du Sud — configuration Apache (hébergement mutualisé OVH).
+# Ce fichier caché doit être envoyé avec le reste du dossier public/ (voir README.md).
+
+Options -MultiViews -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+AddDefaultCharset utf-8
+AddCharset utf-8 .css .js .xml .json .webmanifest .txt .svg
+
+AddType image/webp .webp
+AddType image/svg+xml .svg
+AddType image/x-icon .ico
+AddType font/woff2 .woff2
+AddType video/mp4 .mp4
+AddType application/manifest+json .webmanifest
+AddType application/xml .xml
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # 1. Une seule adresse officielle : https://vibe-du-sud.fr (HTTPS, sans www)
+  RewriteCond %{SERVER_PORT} 80 [OR]
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://vibe-du-sud.fr%{REQUEST_URI} [L,R=301]
+
+  # 2. Fichiers cachés (.git, .env…) inaccessibles, sauf .well-known (certificats)
+  RewriteRule (^|/)\.(?!well-known/) - [F]
+
+  # 3. Anciennes adresses de la version précédente du site (301 : Google transfère le référencement)
+  RewriteRule ^histoire(\.html)?/?$ /a-propos/ [L,R=301]
+  RewriteRule ^mentions-legales\.html$ /mentions-legales/ [L,R=301]
+  RewriteRule ^sw\.js$ - [G]
+
+  # 4. /page/index.html → /page/ (évite le contenu en double)
+  RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[\s?] [NC]
+  RewriteRule ^(.*/)?index\.html$ /$1 [L,R=301,NC]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Sécurité
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Strict-Transport-Security "max-age=31536000"
+
+  # Cache navigateur
+  # - CSS et JS : un an. Leur adresse contient ?v=… qui change à chaque `npm run build`.
+  # - Photos, vidéos, polices : un an. Pour remplacer une photo, donnez-lui un nouveau nom.
+  # - Pages HTML : toujours revalidées, pour voir les mises à jour tout de suite.
+  <FilesMatch "\.(css|js|webp|jpg|woff2|mp4)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(svg|png|ico|webmanifest)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(html|xml|txt)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>
+
+# Compression des fichiers texte (les images, vidéos et polices sont déjà compressées)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/xml application/javascript text/javascript application/json application/manifest+json application/ld+json image/svg+xml image/x-icon
+</IfModule>

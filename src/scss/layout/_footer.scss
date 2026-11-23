@@ -1,0 +1,152 @@
+// Pied de page : lettre d'information, liens, grande signature.
+@use '../base/variables' as *;
+
+.site-footer {
+  overflow: hidden;
+  color: var(--color-ink);
+  background: var(--color-cream);
+  border-top: 1px solid var(--color-ink);
+}
+.site-footer__top {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 64px;
+  padding: 80px var(--gutter) 56px;
+
+  @media (max-width: $tablette) {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+// Lettre d'information
+.newsletter__title {
+  font-size: 26px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+.newsletter > p {
+  margin-top: 12px;
+  max-width: 40ch;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+.newsletter__form {
+  display: flex;
+  margin-top: 24px;
+  max-width: 28rem;
+  overflow: hidden;
+  border: 1px solid var(--color-ink);
+  border-radius: 999px;
+  background: var(--color-white);
+
+  &:focus-within {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 16px;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 12px;
+  }
+  input::placeholder {
+    color: var(--color-muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.071em;
+  }
+  button {
+    padding: 0 24px;
+    background: var(--gradient-sunset);
+    color: var(--color-ink);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.071em;
+  }
+}
+.newsletter__status {
+  margin-top: 24px;
+  font-size: 12px;
+}
+
+// Liens
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+
+  h2 {
+    font-size: 14px;
+    letter-spacing: 0.11em;
+    margin-bottom: 16px;
+  }
+  a {
+    font-size: 12px;
+    letter-spacing: 0.067em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  a:hover {
+    color: var(--color-coral-text);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.footer-nav__list {
+  display: grid;
+  gap: 8px;
+}
+
+// Coordonnées
+.site-footer__contact {
+  margin-top: 32px;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--color-muted);
+
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+// Signature
+.site-footer__brand {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 24px var(--gutter) 0;
+}
+.site-footer__emblem {
+  width: 40px;
+  height: 40px;
+  color: var(--color-coral);
+  animation: pulse 4s ease-in-out infinite;
+}
+.site-footer__wordmark {
+  font-size: clamp(36px, 9vw, 130px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.site-footer__legal {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 32px var(--gutter);
+  font-size: 10px;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-muted);
+}

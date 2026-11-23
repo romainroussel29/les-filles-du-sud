@@ -1,0 +1,104 @@
+// Bandeaux de texte qui défilent en boucle (le contenu est doublé pour un raccord invisible).
+// Variantes : annonces (en-tête), soleil et azur (rubans de l'accueil), pied de page.
+
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+  user-select: none;
+
+  &:hover .marquee__track {
+    animation-play-state: paused;
+  }
+}
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee--reverse .marquee__track {
+  animation-direction: reverse;
+}
+.marquee__group {
+  display: flex;
+}
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+}
+.marquee__star {
+  display: inline-block;
+  margin: 0 0.9em;
+  animation: spin 6s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+// Annonces en haut de page
+.marquee--announcement {
+  padding: 6px 0;
+  background: var(--color-ink);
+  color: var(--color-white);
+  font-size: 10px;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+
+  .marquee__track {
+    animation-duration: 40s;
+  }
+  .marquee__star {
+    color: var(--color-sun);
+  }
+}
+
+// Rubans inclinés de l'accueil
+.marquee--sun,
+.marquee--azure {
+  width: 110%;
+  margin-left: -5%;
+  padding: 14px 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(18px, 3vw, 34px);
+  line-height: 1.1;
+}
+.marquee--sun {
+  position: relative;
+  z-index: 1;
+  background: var(--gradient-sunset);
+  color: var(--color-ink);
+  transform: rotate(-2deg);
+}
+.marquee--azure {
+  margin-top: -8px;
+  background: var(--color-azure);
+  color: var(--color-white);
+  transform: rotate(1.6deg);
+
+  .marquee__star {
+    color: var(--color-sun);
+  }
+}
+
+// Grand texte détouré du pied de page
+.marquee--footer {
+  padding: 28px 0 8px;
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(32px, 7vw, 96px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-ink);
+
+  .marquee__track {
+    animation-duration: 50s;
+  }
+  .marquee__star {
+    color: var(--color-coral);
+    -webkit-text-stroke: 0;
+  }
+}

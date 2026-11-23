@@ -1,0 +1,108 @@
+// Polices auto-hébergées (public/assets/fonts), sous-ensemble latin : aucune requête vers Google Fonts.
+// font-display: swap affiche le texte tout de suite avec une police système.
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/ibm-plex-mono-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/ibm-plex-mono-latin-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/ibm-plex-mono-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Unbounded';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('../fonts/unbounded-latin-900.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/caveat-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('../fonts/archivo-variable-latin.woff2') format('woff2-variations');
+}
+
+// Surtitre en petites capitales
+.eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.093em;
+  text-transform: uppercase;
+}
+
+// Titres larges (Archivo étiré)
+.title-wide {
+  font-family: var(--font-wide);
+  font-stretch: 125%;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+// Titres d'affiche (Unbounded, police ronde et épaisse)
+.title-display {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+// Texte en dégradé coucher de soleil, qui ondule lentement
+.text-gradient {
+  background: var(--gradient-sunset);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s ease-in-out infinite alternate;
+}
+
+// Texte courant mis en forme (pages de contenu)
+.prose {
+  p,
+  li {
+    font-size: 13px;
+  }
+  p + p {
+    margin-top: 12px;
+  }
+  ul {
+    display: grid;
+    gap: 4px;
+    margin-top: 12px;
+    padding-left: 18px;
+  }
+  h2 {
+    margin: 48px 0 14px;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+  }
+  a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  a:hover {
+    color: var(--color-coral-text);
+  }
+}
